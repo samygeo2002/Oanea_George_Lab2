@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Oanea_George_Lab2"
+        xmlns:CustomCommands="clr-namespace:Oanea_George_Lab2.CustomCommands"
         mc:Ignorable="d"
         Title="Virtual Doughnuts Factory" Height="450" Width="800" ResizeMode="NoResize" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Loaded="frmMain_Loaded">
-    <Grid>
+    <Grid MenuItem.Click="FilledItemsShow_Click">
         <Label Content="Doughnuts - Bake &amp; Sale" Name="lblTitle" HorizontalAlignment="Center" Margin="0,33,0,0" VerticalAlignment="Top" FontSize="24" FontWeight="Bold"/>
         <GroupBox Name="gbRaised" Header="Raised" FontWeight="Bold" Margin="165,97,481,202">
             <Canvas>
@@ -16,14 +17,14 @@
                 <TextBox Name="txtSugarRaised" Text="0" IsReadOnly="True" Height="20" Width="61" Canvas.Left="71" Canvas.Top="60" />
             </Canvas>
         </GroupBox>
-        <GroupBox x:Name="gbFilled" Header="Filled" Margin="431,97,197,202" FontWeight="Bold">
+        <GroupBox x:Name="gbFilled" Header="Filled" Margin="431,97,206,202" FontWeight="Bold">
             <Canvas>
                 <Label Name="lblLemonFilled" Content="Lemon" FontWeight="Normal" Canvas.Top="10" Canvas.Left="5" />
-                <TextBox Name="txtLemonFilled" Text="0" IsReadOnly="True" Height="20" Width="61" Canvas.Left="71" Canvas.Top="10" />
+                <TextBox Name="txtLemonFilled" Text="0" IsReadOnly="True" Height="20" Width="61" Canvas.Left="80" Canvas.Top="10" />
                 <Label Name="lblChocolateFilled" Content="Chocolate" FontWeight="Normal" Canvas.Left="5" Canvas.Top="40" />
-                <TextBox Name="txtChocolateFilled" Text="0" IsReadOnly="True" Height="20" Width="61" Canvas.Left="71" Canvas.Top="40" />
+                <TextBox Name="txtChocolateFilled" Text="0" IsReadOnly="True" Height="20" Width="61" Canvas.Left="80" Canvas.Top="40" />
                 <Label Name="lblVanillaFilled" Content="Vanilla" FontWeight="Normal" Canvas.Left="5" Canvas.Top="70" />
-                <TextBox Name="txtVanillaFilled" Text="0" IsReadOnly="True" Height="20" Width="61" Canvas.Left="71" Canvas.Top="70" />
+                <TextBox Name="txtVanillaFilled" Text="0" IsReadOnly="True" Height="20" Width="61" Canvas.Left="80" Canvas.Top="70" />
             </Canvas>
         </GroupBox>
         <GroupBox Name="gbSale" Header="Current Sale" FontWeight="Bold" Margin="35,249,50,10">
@@ -31,29 +32,33 @@
                 <Label Name="lblQuantity" Content="Quantity" FontWeight="Normal" Canvas.Top="3" Canvas.Left="5" />
                 <TextBox Name="txtQuantity" Text="0" Width="30" Canvas.Left="70" Height="22" Canvas.Top="5" KeyUp="txtQuantity_KeyUp"/>
                 <Label Name="lblType" Content="Type" FontWeight="Normal" Canvas.Top="3" Canvas.Left="160" />
-                <ComboBox Name="cmbType" Canvas.Left="200" Canvas.Top="5" Width="120" />
+                <ComboBox Name="cmbType" Canvas.Left="200" Canvas.Top="5" Width="120" SelectionChanged="cmbType_SelectionChanged" />
                 <Label Name="lblPrice" Content="Price" FontWeight="Normal" Canvas.Top="3" Canvas.Left="380" />
                 <TextBox Name="txtPrice" IsReadOnly="True" Text="0" Width="80" Canvas.Left="430" Height="22" Canvas.Top="5" />
                 <ListBox Name="lstSale" Height="80" Width="500" Canvas.Top="30" Canvas.Left="10" />
                 <Label Name="lblTotal" Content="Total" FontWeight="Bold" Canvas.Top="120" Canvas.Left="380" />
                 <TextBox Name="txtTotal" IsReadOnly="True" Text="0" Width="80" Canvas.Left="430" Height="22" Canvas.Top="120" />
-                <Button Name="btnAddToSale" Content="Add To Sale" Canvas.Left="580" Canvas.Top="30" Width="100" FontWeight="Normal" />
-                <Button Name="btnRemoveItem" Content="Remove Item" Canvas.Left="580" Canvas.Top="60" Width="100" FontWeight="Normal" />
-                <Button Name="btnCheckOut" Content="Check Out" FontWeight="Bold" Canvas.Left="580" Canvas.Top="120" Width="100" />
+                <Button Name="btnAddToSale" Content="Add To Sale" Canvas.Left="580" Canvas.Top="30" Width="100" FontWeight="Normal" Click="btnAddToSale_Click" />
+                <Button Name="btnRemoveItem" Content="Remove Item" Canvas.Left="580" Canvas.Top="60" Width="100" FontWeight="Normal" Click="btnRemoveItem_Click" />
+                <Button Name="btnCheckOut" Content="Check Out" FontWeight="Bold" Canvas.Left="580" Canvas.Top="120" Width="100" Click="btnCheckOut_Click" />
             </Canvas>
         </GroupBox>
-        <Menu x:Name="mnuMain" HorizontalAlignment="Left" Height="21" VerticalAlignment="Top" Width="130" Margin="0,2,0,0">
+        <Menu Name="mnuMain" HorizontalAlignment="Left" Height="21" VerticalAlignment="Top" Width="130" Margin="0,2,0,0">
             <MenuItem Header="File">
                 <MenuItem Header="Exit" Click="MenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="Doughnuts">
                 <MenuItem Header="Make">
                     <MenuItem Header="Raised">
-                        <MenuItem Name="glazedToolStripMenuItem" Header="Glazed" IsCheckable="True" Click="glazedToolStripMenuItem_Click"/>
-                        <MenuItem Name="sugarToolStripMenuItem" Header="Sugar" IsCheckable="True" Click="sugarToolStripMenuItem_Click"/>
+                        <MenuItem Name="glazedToolStripMenuItem" Header="Glazed" IsCheckable="True" Click="glazedToolStripMenuItem_Click" InputGestureText="Ctrl+P" Command="ApplicationCommands.Print"/>
+                        <MenuItem Name="sugarToolStripMenuItem" Header="Sugar" IsCheckable="True" Click="sugarToolStripMenuItem_Click" InputGestureText="Ctrl+C" Command="ApplicationCommands.Copy"/>
                     </MenuItem>
-                    <MenuItem Header="Filled"/>
-                    <MenuItem x:Name="mnuStop" Header="Stop" Click="mnuStop_Click"/>
+                    <MenuItem Header="Filled" Click="FilledItems_Click">
+                        <MenuItem Name="lemonFilledMenuItem" Header="Lemon" IsCheckable="True"/>
+                        <MenuItem Name="chocolateFilledMenuItem" Header="Chocolate" IsCheckable="True"/>
+                        <MenuItem Name="vanillaFilledMenuItem" Header="Vanilla" IsCheckable="True"/>
+                    </MenuItem>
+                    <MenuItem Name="mnuStop" Header="Stop" Click="mnuStop_Click" InputGestureText="Ctrl+S" Command="CustomCommands:StopCommand.Launch"/>
                 </MenuItem>
             </MenuItem>
         </Menu>
